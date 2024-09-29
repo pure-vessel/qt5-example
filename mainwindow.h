@@ -3,6 +3,7 @@
 
 #include <QFileSystemModel>
 #include <QMainWindow>
+#include <QSortFilterProxyModel>
 #include <QString>
 
 namespace Ui
@@ -24,8 +25,11 @@ public:
 private:
     Ui::MainWindow* ui;
     QFileSystemModel* fsModel;
+    QSortFilterProxyModel* filterModel;
 
     void filterChanged();
+
+    QString rootPath;
 };
 
 #endif // MAINWINDOW_H

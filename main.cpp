@@ -76,7 +76,6 @@ int main(int argc, char* argv[])
 
     MainWindow window;
 
-    window.model()->setRootPath(rootPath);
     if (parser.isSet(dontUseCustomDirectoryIconsOption))
     {
         window.model()->setOption(QFileSystemModel::DontUseCustomDirectoryIcons);

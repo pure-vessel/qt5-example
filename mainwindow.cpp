@@ -10,17 +10,21 @@
 MainWindow::MainWindow(QWidget* parent) :
         QMainWindow(parent),
         ui(new Ui::MainWindow),
-        fsModel(new QFileSystemModel(this))
+        fsModel(new QFileSystemModel(this)),
+        filterModel(new QSortFilterProxyModel(this))
 {
     ui->setupUi(this);
 
     setWindowTitle(QObject::tr("Dir View"));
 
-    fsModel->setNameFilterDisables(false);
+    // fsModel->setNameFilterDisables(false);
     // | QDir::NoDotAndDotDot if . and .. should not be shown
     fsModel->setFilter(QDir::AllDirs | QDir::Files | QDir::Hidden);
 
-    ui->dirView->setModel(fsModel);
+    filterModel->setSourceModel(fsModel);
+    filterModel->setRecursiveFilteringEnabled(true);
+
+    ui->dirView->setModel(filterModel);
 
     // Demonstrating look and feel features
     ui->dirView->setAnimated(false);
@@ -43,7 +47,9 @@ void MainWindow::filterChanged()
     {
         filter = "*";
     }
-    fsModel->setNameFilters({filter});
+    filterModel->setFilterWildcard(filter);
+    // For situations where root did not match filter before
+    setRootPath(rootPath);
 }
 
 QFileSystemModel* MainWindow::model() const
@@ -53,12 +59,18 @@ QFileSystemModel* MainWindow::model() const
 
 void MainWindow::setRootPath(const QString& path)
 {
+    rootPath = path;
     if (!path.isEmpty())
     {
-        const QModelIndex rootIndex = fsModel->index(QDir::cleanPath(path));
-        if (rootIndex.isValid())
+        const QModelIndex sourceIndex = fsModel->index(QDir::cleanPath(path));
+        if (sourceIndex.isValid())
         {
-            ui->dirView->setRootIndex(rootIndex);
+            fsModel->setRootPath(path);
+            const QModelIndex filteredIndex = filterModel->mapFromSource(sourceIndex);
+            if (filteredIndex.isValid())
+            {
+                ui->dirView->setRootIndex(filteredIndex);
+            }
         }
     }
 }
