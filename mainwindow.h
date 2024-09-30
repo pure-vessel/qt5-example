@@ -6,6 +6,8 @@
 #include <QSortFilterProxyModel>
 #include <QString>
 
+#include "filesystemdirsizemodel.h"
+
 namespace Ui
 {
 class MainWindow;
@@ -24,7 +26,7 @@ public:
 
 private:
     Ui::MainWindow* ui;
-    QFileSystemModel* fsModel;
+    FileSystemDirSizeModel* fsModel;
     QSortFilterProxyModel* filterModel;
 
     void filterChanged();

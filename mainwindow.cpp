@@ -5,19 +5,20 @@
 #include <QScreen>
 #include <QScroller>
 
+#include "filesystemdirsizemodel.h"
+#include "pushbuttonitemdelegate.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget* parent) :
         QMainWindow(parent),
         ui(new Ui::MainWindow),
-        fsModel(new QFileSystemModel(this)),
+        fsModel(new FileSystemDirSizeModel(this)),
         filterModel(new QSortFilterProxyModel(this))
 {
     ui->setupUi(this);
 
     setWindowTitle(QObject::tr("Dir View"));
 
-    // fsModel->setNameFilterDisables(false);
     // | QDir::NoDotAndDotDot if . and .. should not be shown
     fsModel->setFilter(QDir::AllDirs | QDir::Files | QDir::Hidden);
 
@@ -25,6 +26,9 @@ MainWindow::MainWindow(QWidget* parent) :
     filterModel->setRecursiveFilteringEnabled(true);
 
     ui->dirView->setModel(filterModel);
+
+    PushButtonItemDelegate* delegate = new PushButtonItemDelegate(ui->dirView);
+    ui->dirView->setItemDelegateForColumn(fsModel->columnCount() - 1, delegate);
 
     // Demonstrating look and feel features
     ui->dirView->setAnimated(false);

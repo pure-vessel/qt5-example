@@ -2,7 +2,10 @@ QT += widgets
 requires(qtConfig(treeview))
 
 SOURCES       = main.cpp \
-    mainwindow.cpp
+    filesystemdirsizemodel.cpp \
+    mainwindow.cpp \
+    pushbuttonitemdelegate.cpp \
+    pushbuttonwithflag.cpp
 
 # install
 target.path = $$[QT_INSTALL_EXAMPLES]/widgets/itemviews/dirview
@@ -14,4 +17,7 @@ FORMS += \
     mainwindow.ui
 
 HEADERS += \
-    mainwindow.h
+    filesystemdirsizemodel.h \
+    mainwindow.h \
+    pushbuttonitemdelegate.h \
+    pushbuttonwithflag.h
